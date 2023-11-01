@@ -1,12 +1,5 @@
 pipeline {
-    agent { node { label 'Agent1'} }
-
-    stages {
-        stage('install depdencies') {
-            steps {
-                sh 'npm install'
-            }
-        }
+    agent { node { label 'Agent'} }
 
         stage('Unit Testing') {
             steps {
