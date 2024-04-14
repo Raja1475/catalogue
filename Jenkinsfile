@@ -12,5 +12,11 @@ pipeline {
                 echo "unittesting done..."
             }
         }
+
+        stage ('sonar scan') {
+            steps {
+                sh 'sonar-scanner'
+            }
+        }
     }
 }
