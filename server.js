@@ -1,12 +1,3 @@
-const instana = require('@instana/collector');
-// init tracing
-// MUST be done before loading anything else!
-instana({
-    tracing: {
-        enabled: true
-    }
-});
-
 const mongoClient = require('mongodb').MongoClient;
 const mongoObjectID = require('mongodb').ObjectID;
 const bodyParser = require('body-parser');
@@ -24,6 +15,7 @@ const expLogger = expPino({
 });
 
 // MongoDB
+// Actually, this is done by developers. But to reflect we are adding some content and imagine this extra feature
 var db;
 var collection;
 var mongoConnected = false;
@@ -38,26 +30,12 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use((req, res, next) => {
-    let dcs = [
-        "asia-northeast2",
-        "asia-south1",
-        "europe-west3",
-        "us-east1",
-        "us-west1"
-    ];
-    let span = instana.currentSpan();
-    span.annotate('custom.sdk.tags.datacenter', dcs[Math.floor(Math.random() * dcs.length)]);
-
-    next();
-});
-
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.get('/health', (req, res) => {
     var stat = {
-        app: 'OK',
+        app: 'OK-2',
         mongo: mongoConnected
     };
     res.json(stat);
@@ -151,6 +129,7 @@ app.get('/search/:text', (req, res) => {
     }
 });
 
+if (process.env.MONGO == 'true') {
 // set up Mongo
 function mongoConnect() {
     return new Promise((resolve, reject) => {
@@ -166,6 +145,31 @@ function mongoConnect() {
         });
     });
 }
+}
+
+if (process.env.DOCUMENTDB == 'true') {
+function mongoConnect() {
+    return new Promise((resolve, reject) => {
+    var mongoURL = process.env.MONGO_URL || 'mongodb://username:password@mongodb:27017/catalogue?tls=true&replicaSet=rs0&readPreference=secondaryPreferred&retryWrites=false';
+    var client = mongoClient.connect(mongoURL,
+      {
+        // Mutable & Immutable
+        //tlsCAFile: `/home/roboshop/catalogue/rds-combined-ca-bundle.pem` //Specify the DocDB; cert
+        // Container
+        tlsCAFile: `/home/roboshop/catalogue/rds-combined-ca-bundle.pem` //Specify the DocDB; cert
+    }, (error, client) => {
+    if(error) {
+        reject(error);
+    } else {
+        db = client.db('catalogue');
+        collection = db.collection('products');
+        resolve('connected');
+    }
+});
+});
+}
+}
+
 
 // mongodb connection retry loop
 function mongoLoop() {
@@ -185,4 +189,3 @@ const port = process.env.CATALOGUE_SERVER_PORT || '8080';
 app.listen(port, () => {
     logger.info('Started on port', port);
 });
-
