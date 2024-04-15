@@ -33,11 +33,11 @@ pipeline {
                     protocol: 'http',
                     nexusUrl: '54.235.60.60:8081/repository/catalogue/',
                     groupId: 'com.roboshop',
-                    version: '1.0.0.0'
+                    version: '1.0.0.0',
                     repository: 'catalogue',
                     credentialsId: 'nexus-auth',
                     artifacts: [
-                        [artifactId: catalogue,
+                        [artifactId: 'catalogue',
                         classifier: '',
                         file: 'catalogue.zip',
                         type: 'zip']
