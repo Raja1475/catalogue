@@ -26,11 +26,11 @@ pipeline {
         }
 }
 
-post {
-    always {
-        echo "cleanning up workspace..."
-        deleteDir()
-    }
-}
+// post {
+//     always {
+//         echo "cleanning up workspace..."
+//         deleteDir()
+//     }
+// }
 
 }
