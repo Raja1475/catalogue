@@ -24,10 +24,11 @@ pipeline {
                 echo "deploying..."
             }
         }
+}
 
-        stage('Cleanup Workspace') {
-            steps {
-                deleteDir()
-            }
+post {
+    always {
+        echo "cleanning up workspace..."
+        deleteDir()
     }
 }
