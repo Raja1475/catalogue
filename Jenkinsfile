@@ -22,7 +22,7 @@ pipeline {
         stage('packaging') {
             steps {
                 sh 'ls -l'
-                zip dirPath: '.', excludes: 'Jenkinsfile,sonar-project.properties,.git', zipFile: 'catalogue.zip'
+                zip zipFile: 'catalogue.zip', archive: false, exclude: 'Jenkinsfile', '.git', 'sonar-project.properties'
             }
         }
 
