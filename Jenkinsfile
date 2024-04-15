@@ -24,5 +24,10 @@ pipeline {
                 echo "deploying..."
             }
         }
+
+        stage('Cleanup Workspace') {
+            steps {
+                deleteDir()
+            }
     }
 }
