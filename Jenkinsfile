@@ -22,8 +22,7 @@ pipeline {
         stage('packaging') {
             steps {
                 sh 'ls -l'
-                zip zipFile: 'catalogue.zip', archive: false, exclude: 'Jenkinsfile', '.git', 'sonar-project.properties'
-            }
+                zip(zipFile: 'catalogue.zip', archive: false, excludes: ['Jenkinsfile', '.git', 'sonar-project.properties'])            }
         }
 
         stage('artifact-uploder') {
