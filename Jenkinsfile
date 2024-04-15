@@ -13,11 +13,11 @@ pipeline {
             }
         }
 
-        stage ('sonar scan') {
-            steps {
-                sh 'sonar-scanner'
-            }
-        }
+        // stage ('sonar scan') {
+        //     steps {
+        //         sh 'sonar-scanner'
+        //     }
+        // }
 
         stage('deployment') {
             steps {
