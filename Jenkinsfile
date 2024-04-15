@@ -9,7 +9,7 @@ pipeline {
         }
         stage ('unit testing') {
             steps {
-                echo "unittesting done..."
+                echo "unittesting done...."
             }
         }
 
